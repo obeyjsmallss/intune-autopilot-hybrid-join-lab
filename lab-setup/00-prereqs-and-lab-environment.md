@@ -59,6 +59,20 @@ Minimum workable setup typically includes:
 Create at least 2 standard users for enrollment tests:
 - `testuser1`
 - `testuser2`
+  
+ ### Identity Prereq (Recommended): UPN suffix for cloud sign-in
+Autopilot sign-in is cloud-first. If your users are `@jmcnairtech.local`, sign-in and enrollment can be inconsistent.
+
+**Recommendation:** set test users’ UPN to a domain that exists in your Entra tenant:
+- Preferred: your verified custom domain (ex: `@jmcnairtech.com`)
+- Lab fallback: your tenant `@<tenant>.onmicrosoft.com`
+
+**Action:**
+1. Open **Active Directory Domains and Trusts**
+2. Right-click the top node → **Properties**
+3. Add an **Alternative UPN suffix**
+4. In **ADUC**, edit each test user → **Account** tab → set the new UPN suffix
+
 
 ---
 
@@ -110,12 +124,21 @@ A successful run means the provisioned device appears in all 3 locations:
 Save these in `/screenshots` using a consistent naming scheme.
 
 Minimum for this step:
-- `00-lab-domain-confirmation.png` (ADUC showing domain + OUs)
+- `00-aduc-ou-structure.png` (ADUC showing domain + Lab Users + Lab Devices/Autopilot Devices)
 - `00-dc-ip-dns-settings.png` (DC network config showing static IP + DNS)
-- `00-test-users-created.png` (ADUC showing test users)
-- `00-lab-topology-note.png` (optional: a quick diagram or note of DC + client)
+- `00-test-users-in-lab-users.png` (ADUC showing test users inside Lab Users OU)
+- `00-upn-suffix-added.png` (Domains & Trusts showing the alternate UPN suffix)
+- `00-test-user-upn-set.png` (User account tab showing UPN set to the new suffix)
+- `00-lab-topology-note.png` (optional)
 
 ---
+## Done Criteria (to move to Step 01)
+You’re ready to proceed when:
+- `Lab Users`, `Lab Devices`, and `Autopilot Devices` OUs exist
+- At least 2 test users exist in `Lab Users`
+- Test users have an Entra-friendly UPN suffix (custom domain or `*.onmicrosoft.com`)
+- DC has static IP, DNS points to the DC, and time is correct
+- Step 00 screenshots are captured
 
 ## Notes / Scope
 - This project documents configuration for a realistic hybrid onboarding flow.
