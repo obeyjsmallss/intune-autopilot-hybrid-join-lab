@@ -44,7 +44,7 @@ Minimum workable setup typically includes:
 
 ### On-Prem AD Domain
 - Domain: `jmcnairtech.local`
-- DC hostname: `DC01` (or your chosen name)
+- DC hostname: `Lab-DC01` (or your chosen name)
 - DC roles: AD DS, DNS
 
 ### OU Structure (Recommended)
@@ -124,12 +124,14 @@ A successful run means the provisioned device appears in all 3 locations:
 Save these in `/screenshots` using a consistent naming scheme.
 
 Minimum for this step:
-- `00-aduc-ou-structure.png` (ADUC showing domain + Lab Users + Lab Devices/Autopilot Devices)
+- `00-ad-ou-structure.png` (ADUC showing domain + Lab Users + Lab Devices/Autopilot Devices)
 - `00-dc-ip-dns-settings.png` (DC network config showing static IP + DNS)
-- `00-test-users-in-lab-users.png` (ADUC showing test users inside Lab Users OU)
-- `00-upn-suffix-added.png` (Domains & Trusts showing the alternate UPN suffix)
-- `00-test-user-upn-set.png` (User account tab showing UPN set to the new suffix)
-- `00-lab-topology-note.png` (optional)
+- `00-ad-test-users-in-lab-users.png` (ADUC showing test users inside Lab Users OU)
+- `00-ad-upn-suffix-added.png` (Domains & Trusts showing the alternate UPN suffix)
+- `00-ad-test-user-upn-set.png` (User account tab showing UPN set to the new suffix)
+Optional:
+- `00-dc-hostname-lab-dc01.png` (proof of DC hostname)
+- `00-lab-topology-note.png` (quick diagram or Hyper-V VM list)
 
 ---
 ## Done Criteria (to move to Step 01)
