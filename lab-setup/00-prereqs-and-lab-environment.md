@@ -128,7 +128,8 @@ Minimum for this step:
 - `00-dc-ip-dns-settings.png` (DC network config showing static IP + DNS)
 - `00-ad-test-users-in-lab-users.png` (ADUC showing test users inside Lab Users OU)
 - `00-ad-upn-suffix-added.png` (Domains & Trusts showing the alternate UPN suffix)
-- `00-ad-test-user-upn-set.png` (User account tab showing UPN set to the new suffix)
+- `00-ad-test-user-upn-set.png` (User account tab showing UPN set to the new suffix
+
 Optional:
 - `00-dc-hostname-lab-dc01.png` (proof of DC hostname)
 - `00-lab-topology-note.png` (quick diagram or Hyper-V VM list)
