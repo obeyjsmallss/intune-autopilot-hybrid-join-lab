@@ -43,27 +43,16 @@ Minimum workable setup typically includes:
 
 ---
 
-## Lab Environment Overview
+## Lab Environment Overview (High-Level)
 
-### On-Prem AD Domain
+### On-Prem AD Domain (Baseline)
 - Domain: `jmcnairtech.local`
 - DC hostname: `Lab-DC01`
 - DC roles: AD DS, DNS
 - DC IP: `10.0.0.10`
 
-### OU Structure (Recommended)
-
-**Users**
-- `OU=Lab Users,DC=jmcnairtech,DC=local`
-
-**Devices**
-- `OU=Lab Devices,DC=jmcnairtech,DC=local`
-  - `OU=Autopilot Devices,OU=Lab Devices,DC=jmcnairtech,DC=local`
-
-### Test Users
-Create at least two standard users for enrollment tests:
-- `testuser1`
-- `testuser2`
+> **Directory object build-out (OUs, users, groups) is documented in Step 01:**  
+> `lab-setup/01-onprem-ad-dns-ou-structure.md`
 
 ---
 
@@ -86,7 +75,7 @@ Autopilot sign-in is cloud-first. If users are `@jmcnairtech.local`, sign-in and
 
 ### Lab Networking (Hyper-V)
 - Lab subnet: **10.0.0.0/24**
-- Hyper-V Internal vSwitch with the host providing **NAT (NetNat)** for internet access
+- Hyper-V **Internal vSwitch** with the host providing **NAT (NetNat)** for internet access
 - Host gateway on the lab network: **10.0.0.1**
 - **DHCP is provided by `Lab-DC01`** for the lab subnet
 
@@ -124,8 +113,7 @@ Autopilot sign-in is cloud-first. If users are `@jmcnairtech.local`, sign-in and
 A successful run means the provisioned device appears in all 3 locations:
 
 1. **Active Directory**
-   - Computer object exists in:
-     `OU=Autopilot Devices,OU=Lab Devices,DC=jmcnairtech,DC=local`
+   - Computer object exists in the correct OU (documented in Step 01)
 
 2. **Microsoft Entra ID**
    - Device shows as **Microsoft Entra hybrid joined**
@@ -141,26 +129,23 @@ Save these in `/screenshots` using the naming format:
 `<step#>-<component>-<short-description>.png`
 
 **Minimum for this step**
-- `00-ad-ou-structure.png` (ADUC showing domain + Lab Users + Lab Devices/Autopilot Devices)
-- `00-dc-ip-dns-settings.png` (DC IPv4 showing static IP + gateway + DNS)
-- `00-ad-test-users-in-lab-users.png` (ADUC showing test users inside Lab Users OU)
 - `00-ad-upn-suffix-added.png` (Domains & Trusts showing the alternate UPN suffix)
 - `00-ad-test-user-upn-set.png` (User account tab showing UPN set to the new suffix)
+- `00-dc-ip-dns-settings.png` (DC IPv4 showing static IP + gateway + DNS)
 - `00-dhcp-scope-options.png` (DHCP options: Router 10.0.0.1 + DNS 10.0.0.10 + domain)
 - `00-win11-dhcp-lease.png` (Win11 `ipconfig` showing DHCP lease + DNS/DC)
 
 **Optional**
 - `00-dc-hostname-lab-dc01.png` (proof of DC hostname)
 - `00-dc-dns-forwarders.png` (DNS forwarder configured, e.g., 8.8.8.8)
+- `00-host-netnat-labnat.png` (host `Get-NetNat` showing NAT for 10.0.0.0/24)
 - `00-lab-topology-note.png` (quick diagram or Hyper-V VM list)
 
 ---
 
 ## Done Criteria (to move to Step 01)
 You’re ready to proceed when:
-- `Lab Users`, `Lab Devices`, and `Autopilot Devices` OUs exist
-- At least 2 test users exist in `Lab Users`
-- Test users have an Entra-friendly UPN suffix (custom domain or `*.onmicrosoft.com`)
+- UPN suffix is available and at least one test user is set to `@jmcnairtech.com`
 - DC has static IP, DNS points to the DC, and time is correct
 - DHCP is issuing leases to the Windows 11 VM on `10.0.0.0/24`
 - Step 00 screenshots are captured
@@ -169,4 +154,4 @@ You’re ready to proceed when:
 
 ## Notes / Scope
 This project documents configuration for a realistic hybrid onboarding flow.  
-Next steps include: Entra Connect (SCP), Intune ODJ connector, GPO device registration, Autopilot profiles, ESP, compliance/CA, Win32 apps, and troubleshooting.
+Next steps include: On-prem AD OU/user structure (Step 01), Entra Connect (SCP), Intune ODJ connector, GPO device registration, Autopilot profiles, ESP, compliance/CA, Win32 apps, and troubleshooting.
