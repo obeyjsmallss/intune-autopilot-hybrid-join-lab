@@ -28,16 +28,6 @@ Windows 11 VM reset → OOBE → Autopilot provisioning simulation → Offline D
 
 Diagrams are stored in: `/architecture-diagrams`
 
----
-
-## Proof Highlights (Screenshots)
-Screenshots are stored in: `/screenshots`  
-Naming format: `<step#>-<component>-<short-description>.png`
-
-- Entra-friendly UPN suffix configured in AD  
-  `screenshots/00-ad-upn-suffix-added.png`
-- Test user UPN set to `@jmcnairtech.com`  
-  `screenshots/00-ad-test-user-upn-set.png`
 
 ---
 
