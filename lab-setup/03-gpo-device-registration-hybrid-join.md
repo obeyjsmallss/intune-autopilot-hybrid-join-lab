@@ -1,82 +1,70 @@
-# 03 - GPO Device Registration (Hybrid Join)
+# 03 - Domain Join the Windows 11 VM (Lab Client)
 
 ## Goal
-Enable automatic device registration so domain-joined Windows devices can become **Microsoft Entra hybrid joined**.
+Join the **Windows 11 Hyper-V VM** to the on-prem domain `jmcnairtech.local` so it can:
+- Receive GPOs (Step 04)
+- Validate hybrid join plumbing before Autopilot/ODJ steps
 
 ## Why this matters
-After Step 02 (SCP), devices can discover the tenant.
-This step enables Windows to automatically register the device in Entra (Hybrid Join) after domain join.
+Hybrid Entra registration depends on the device being **domain joined** and able to read the SCP/GPO settings.
+This step prepares the client for Step 04 (automatic device registration).
 
 ---
 
 ## What I configured (high level)
-- Created and linked a GPO to enable **automatic device registration**
-- Forced policy update on the Windows 11 VM
-- Validated scheduled tasks / dsregcmd status
+- Confirmed the Win11 VM is on the lab network (`10.0.0.0/24`) and using DC DNS (`10.0.0.10`)
+- Joined the VM to the domain: `jmcnairtech.local`
+- Rebooted and confirmed domain membership
+- Confirmed the computer object exists in Active Directory
 
 ---
 
-## Configuration (GPO)
-
-### 1) Create a GPO
-Name:
-- `GPO - Entra Hybrid Join (Auto Device Registration)`
-
-### 2) Link the GPO
-Recommended: link at the **domain level** (`jmcnairtech.local`)
-- This ensures all domain-joined devices get the setting (lab-friendly)
-
-(If you want to scope it later, link to `OU=Lab Devices` instead.)
-
-### 3) Enable auto-registration
-In the GPO, set:
-
-**Computer Configuration**
-→ Policies
-→ Administrative Templates
-→ Windows Components
-→ Device Registration
-
-- **Register domain-joined computers as devices** = **Enabled**
+## Configuration Notes
+- Domain: `jmcnairtech.local`
+- DC: `Lab-DC01` (`10.0.0.10`)
+- Lab subnet: `10.0.0.0/24`
+- The computer object may land in **Computers** by default unless redirected; OU placement is handled later during Autopilot/ODJ.
 
 ---
 
 ## Validation
 
-### On the Windows 11 VM
-Run:
-- `gpupdate /force`
-- Reboot the VM
+### A) On the Windows 11 VM
+Confirm DNS points to the DC:
+- `ipconfig /all`
+  - DNS Servers should include: `10.0.0.10`
 
-Then check:
-- `dsregcmd /status`
+Confirm domain join status:
+- Settings → System → About → Domain or workgroup
+  - Shows domain: `jmcnairtech.local`
 
-Expected (eventually):
-- `AzureAdJoined : NO`
-- `DomainJoined : YES`
-- `DeviceId` present
-- Hybrid join may take a few minutes after reboot + network is stable
+(Optional command validation)
+- `whoami`
+  - Should show `JMCNAIRTECH\username` when logged in with a domain account
 
-Optional checks:
-- Task Scheduler → Microsoft → Windows → Workplace Join → look for registration activity
+### B) On Lab-DC01 (ADUC)
+- Verify the computer account exists:
+  - Default location: `CN=Computers,DC=jmcnairtech,DC=local`
+  - Or inside your lab device OU if you moved it manually
 
 ---
 
 ## Screenshots to Capture (Step 03)
 
 Minimum:
-- `03-gpo-device-registration-setting.png`
-  - Screenshot of the GPO setting **Enabled**
-- `03-win11-dsregcmd-status.png`
-  - Screenshot of `dsregcmd /status` output (DomainJoined = YES)
+- `03-win11-domain-joined.png`
+  - Win11 “About” (or System info) showing domain: `jmcnairtech.local`
+- `03-ad-computer-object.png`
+  - ADUC showing the computer account exists (Computers container or chosen OU)
 
 Optional:
-- `03-gpo-linked-scope.png`
-  - Screenshot showing the GPO is linked to the domain or Lab Devices OU
+- `03-win11-ipconfig-dns.png`
+  - `ipconfig /all` showing DNS Server = `10.0.0.10`
 
 ---
 
 ## Done Criteria (to move to Step 04)
-- GPO is linked and applied
-- Win11 VM shows policy applied and `dsregcmd /status` indicates the device is registering/registered (DomainJoined = YES at minimum)
-- Step 03 screenshots captured
+You’re ready to proceed when:
+- Win11 VM is domain joined to `jmcnairtech.local`
+- Computer object exists in AD
+- Step 03 screenshots are captured
