@@ -53,7 +53,7 @@ Run (Admin CMD):
 
 Expected signals (timing can vary):
 - `DomainJoined : YES`
-- `AzureAdJoined : NO` (this is normal for hybrid)
+- `AzureAdJoined : YES` 
 - Registration indicators present (DeviceId populated / tenant info visible)
 - Device appears in Entra as **Microsoft Entra hybrid joined** (may take a few minutes)
 
